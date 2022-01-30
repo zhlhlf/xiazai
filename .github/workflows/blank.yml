@@ -1,0 +1,32 @@
+name: Build OpenWrt
+
+on: 
+  watch:
+    types: [started]
+    
+env:
+  repo_url: https://github.com/lede-project/source
+  repo_branch: reboot
+  repo_os: openwrt
+  config: .config22
+  diy_sh: diy.sh
+  model: PSG1218
+  TZ: Asia/Shanghai
+  newpack: true66
+  ssh: true66
+  set: true
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+
+    - name: 清理环境
+      run: |
+        wget https://github.com/zhlhlf/openwrt/suites/5111850398/artifacts/153302681 666.zip
+        unzip 666.zip
+        ls
