@@ -27,6 +27,6 @@ jobs:
 
     - name: 清理环境
       run: |
-        wget https://pipelines.actions.githubusercontent.com/3GXwXRZdOX0Au2ZuATE236BwwvNYmUNdkiN7UTMxhqR84Lbd71/_apis/pipelines/1/runs/28/signedartifactscontent?artifactName=openwrt-by-jczhl&urlExpires=2022-01-30T16%3A18%3A08.6057253Z&urlSigningMethod=HMACV2&urlSignature=6U4LqZ7Z%2F20Elb%2BlIbUZ9m%2BdUe5PP7eMJtdOvc2bqoU%3D 666.zip
+        wget https://pipelines.actions.githubusercontent.com/3GXwXRZdOX0Au2ZuATE236BwwvNYmUNdkiN7UTMxhqR84Lbd71/_apis/pipelines/1/runs/28/signedartifactscontent?artifactName=openwrt-by-jczhl&urlExpires=2022-01-30T16%3A22%3A02.4426800Z&urlSigningMethod=HMACV2&urlSignature=Yui4WIyLaIb%2Fz0r%2FDtmcgDhLPblmfkna0TJmcuiVjJY%3D 666.zip
         unzip 666.zip
         ls
