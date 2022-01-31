@@ -4,12 +4,12 @@ name: Build
 on:
   workflow_dispatch:
     inputs:
-      rom_name:
-        description: 'rom_name'
+      name:
+        description: 'name'
         required: true
         default: '666666.zip'
-      ROM_URL:
-        description: 'ROM_URL'
+      URL:
+        description: 'URL'
         required: true
         default: 'https://drive.google.com/uc?export=download&confirm=c0UI&id=1M2BkRuR94NRSl6OhNjHqA0BFp2BtGFNb'
 
@@ -18,8 +18,8 @@ on:
   #  types: [started]
     
 #env:
- # rom_name: Fluid-1.4-Rum-UNOFFICIAL-m1882-20210503.zip
-  #ROM_URL: https://drive.google.com/uc?export=download&confirm=c0UI&id=1M2BkRuR94NRSl6OhNjHqA0BFp2BtGFNb
+ # name: Fluid-1.4-Rum-UNOFFICIAL-m1882-20210503.zip
+  #URL: https://drive.google.com/uc?export=download&confirm=c0UI&id=1M2BkRuR94NRSl6OhNjHqA0BFp2BtGFNb
 
 
 jobs:
@@ -30,17 +30,12 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
 
-    - name: Set var
-      run: |
-        echo "::set-output name=date::$(date +%F)"
-      id: var      
-
     - name: 下载
       run: |
-        aria2c -x16 -j5 -U "Mozilla/5.0" -d tmp -o "$rom_name" "$ROM_URL" || wget -U "Mozilla/5.0" "$ROM_URL" -O "tmp/$rom_name"
+        aria2c -x16 -j5 -U "Mozilla/5.0" -d tmp -o "$name" "$URL" || wget -U "Mozilla/5.0" "$URL" -O "tmp/$name"
 
     - name: 上传到transfer
       run: |
         curl -sL https://git.io/file-transfer | sh
         ls tmp
-        sudo ./transfer wet tmp/$rom_name
+        sudo ./transfer wet tmp/$name
