@@ -1,12 +1,25 @@
 name: Build
 
-on: 
-  watch:
-    types: [started]
+
+on:
+  workflow_dispatch:
+    inputs:
+      rom_name:
+        description: 'rom_name'
+        required: true
+        default: '666666.zip'
+      ROM_URL:
+        description: 'ROM_URL'
+        required: true
+        default: 'https://drive.google.com/uc?export=download&confirm=c0UI&id=1M2BkRuR94NRSl6OhNjHqA0BFp2BtGFNb'
+
+#on: 
+ # watch:
+  #  types: [started]
     
-env:
-  rom_name: Fluid-1.4-Rum-UNOFFICIAL-m1882-20210503.zip
-  ROM_URL: https://drive.google.com/uc?export=download&confirm=c0UI&id=1M2BkRuR94NRSl6OhNjHqA0BFp2BtGFNb
+#env:
+ # rom_name: Fluid-1.4-Rum-UNOFFICIAL-m1882-20210503.zip
+  #ROM_URL: https://drive.google.com/uc?export=download&confirm=c0UI&id=1M2BkRuR94NRSl6OhNjHqA0BFp2BtGFNb
 
 
 jobs:
@@ -20,6 +33,6 @@ jobs:
     - name: 下载上传
       run: |
         curl -sL https://git.io/file-transfer | sh
-        aria2c -x16 -j5 -U "Mozilla/5.0" -d tmp -o $ $ || wget -U "Mozilla/5.0" $ROM_URL -O tmp/$rom_name
+        aria2c -x16 -j5 -U "Mozilla/5.0" -d tmp -o $ $ || wget -U "Mozilla/5.0" $ROM_URL -O $rom_name
         ls
         sudo ./transfer wet Fluid-1.4-Rum-UNOFFICIAL-m1882-20210503.zip
