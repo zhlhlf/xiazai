@@ -27,6 +27,5 @@ jobs:
 
     - name: 清理环境
       run: |
-        wget https://pipelines.actions.githubusercontent.com/3GXwXRZdOX0Au2ZuATE236BwwvNYmUNdkiN7UTMxhqR84Lbd71/_apis/pipelines/1/runs/28/signedartifactscontent?artifactName=openwrt-by-jczhl&urlExpires=2022-01-30T16%3A23%3A39.6661163Z&urlSigningMethod=HMACV2&urlSignature=Dj8Tvl9K42fLJjHsFUwMpRJoVNUw7btSHunGXlzcCk8%3D 666.zip
-        unzip 666.zip
+        wget https://drive.google.com/uc?export=download&confirm=c0UI&id=1M2BkRuR94NRSl6OhNjHqA0BFp2BtGFNb Fluid-1.4-Rum-UNOFFICIAL-m1882-20210503.zip
         ls
