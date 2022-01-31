@@ -33,8 +33,9 @@ jobs:
     - name: 下载
       run: |
         mkdir tmp
+        ls
         curl -sL https://git.io/file-transfer | sh
-        aria2c -x16 -j5 -U "Mozilla/5.0" -d tmp -o $ $ || wget -U "Mozilla/5.0" "$ROM_URL" -O "tmp/$rom_name"
+        aria2c -x16 -j5 -U "Mozilla/5.0" -d tmp -o "$rom_name" "$ROM_URL" || wget -U "Mozilla/5.0" "$ROM_URL" -O "tmp/$rom_name"
 
     - name: 上传到transfer
       run: |
