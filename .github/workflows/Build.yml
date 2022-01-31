@@ -8,7 +8,8 @@ on:
 env:
   name: Fluid-1.4-Rum-UNOFFICIAL-m1882-20210503.zip
   URL: http://mtw.so/5DDbVN
-
+  
+  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,7 +20,7 @@ jobs:
 
     - name: 下载
       run: |
-        aria2c -x16 -j5 -U "Mozilla/5.0" -d tmp -o "$name" "$URL" || wget -U "Mozilla/5.0" "$URL" -O "tmp/$name"
+        aria2c -x16 -j5 -U "yimu" -d tmp -o "$name" "$URL" || wget -U "yimu|" "$URL" -O "tmp/$name"
 
     - name: 上传到transfer
       run: |
