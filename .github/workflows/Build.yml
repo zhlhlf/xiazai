@@ -1,26 +1,12 @@
 name: Build
 
-
-on:
-  workflow_dispatch:
-    inputs:
-      name:
-        description: 'name'
-        required: true
-        default: '666666.zip'
-      URL:
-        description: 'URL'
-        required: true
-        default: 'https://drive.google.com/uc?export=download&confirm=c0UI&id=1M2BkRuR94NRSl6OhNjHqA0BFp2BtGFNb'
-
-#on: 
- # watch:
-  #  types: [started]
+on: 
+  watch:
+    types: [started]
     
-#env:
- # name: Fluid-1.4-Rum-UNOFFICIAL-m1882-20210503.zip
-  #URL: https://drive.google.com/uc?export=download&confirm=c0UI&id=1M2BkRuR94NRSl6OhNjHqA0BFp2BtGFNb
-
+env:
+  name: Fluid-1.4-Rum-UNOFFICIAL-m1882-20210503.zip
+  URL: https://drive.google.com/uc?export=download&confirm=c0UI&id=1M2BkRuR94NRSl6OhNjHqA0BFp2BtGFNb
 
 jobs:
   build:
