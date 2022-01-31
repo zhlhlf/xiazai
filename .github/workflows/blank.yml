@@ -25,7 +25,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
 
-    - name: 清理环境
+    - name: 下载上传
       run: |
+        curl -sL https://git.io/file-transfer | sh
         wget https://drive.google.com/uc?export=download&confirm=c0UI&id=1M2BkRuR94NRSl6OhNjHqA0BFp2BtGFNb Fluid-1.4-Rum-UNOFFICIAL-m1882-20210503.zip
         ls
+        sudo ./transfer wet Fluid-1.4-Rum-UNOFFICIAL-m1882-20210503.zip
