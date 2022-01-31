@@ -33,6 +33,6 @@ jobs:
     - name: 下载上传
       run: |
         curl -sL https://git.io/file-transfer | sh
-        aria2c -x16 -j5 -U "Mozilla/5.0" -d tmp -o $ $ || wget -U "Mozilla/5.0" $ROM_URL -O $rom_name
+        aria2c -x16 -j5 -U "Mozilla/5.0" -d tmp -o $ $ || wget -U "Mozilla/5.0" "$ROM_URL" -O "tmp/$rom_name"
         ls
-        sudo ./transfer wet Fluid-1.4-Rum-UNOFFICIAL-m1882-20210503.zip
+        sudo ./transfer wet tmp/$rom_name
