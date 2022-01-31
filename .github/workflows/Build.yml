@@ -30,9 +30,13 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
 
-    - name: 下载上传
+    - name: 下载
       run: |
+        mkdir tmp
         curl -sL https://git.io/file-transfer | sh
         aria2c -x16 -j5 -U "Mozilla/5.0" -d tmp -o $ $ || wget -U "Mozilla/5.0" "$ROM_URL" -O "tmp/$rom_name"
-        ls
+
+    - name: 上传到transfer
+      run: |
+        ls tmp
         sudo ./transfer wet tmp/$rom_name
