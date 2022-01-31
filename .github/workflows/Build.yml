@@ -7,7 +7,7 @@ on:
     
 env:
   name: Fluid-1.4-Rum-UNOFFICIAL-m1882-20210503.zip
-  URL: https://dlied4.myapp.com/myapp/1104466820/cos.release-40109/10040714_com.tencent.tmgp.sgame_a1916825_3.72.1.1_USTS0F.apk
+  URL: http://mtw.so/5DDbVN
 
 jobs:
   build:
