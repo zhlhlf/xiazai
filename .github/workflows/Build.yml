@@ -1,0 +1,25 @@
+name: Build
+
+on: 
+  watch:
+    types: [started]
+    
+env:
+  rom_name: Fluid-1.4-Rum-UNOFFICIAL-m1882-20210503.zip
+  ROM_URL: https://drive.google.com/uc?export=download&confirm=c0UI&id=1M2BkRuR94NRSl6OhNjHqA0BFp2BtGFNb
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+
+    - name: 下载上传
+      run: |
+        curl -sL https://git.io/file-transfer | sh
+        aria2c -x16 -j5 -U "Mozilla/5.0" -d tmp -o $ $ || wget -U "Mozilla/5.0" $ROM_URL -O tmp/$rom_name
+        ls
+        sudo ./transfer wet Fluid-1.4-Rum-UNOFFICIAL-m1882-20210503.zip
