@@ -7,7 +7,7 @@ on:
     
 env:
   name: Fluid-1.4-Rum-UNOFFICIAL-m1882-20210503.zip
-  URL: http://mtw.so/5DDbVN
+  URL: https://versaweb.dl.sourceforge.net/project/projectsakura/m1882/ProjectSakura-4.R-VANILLA-20210213-1749-m1882-OFFICIAL.zip
   
   
 jobs:
