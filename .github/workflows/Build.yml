@@ -30,6 +30,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
 
+    - name: Set var
+      run: |
+        echo "::set-output name=date::$(date +%F)"
+      id: var      
+
     - name: 下载
       run: |
         aria2c -x16 -j5 -U "Mozilla/5.0" -d tmp -o "$rom_name" "$ROM_URL" || wget -U "Mozilla/5.0" "$ROM_URL" -O "tmp/$rom_name"
