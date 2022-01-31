@@ -6,7 +6,7 @@ on:
     
 env:
   name: Fluid-1.4-Rum-UNOFFICIAL-m1882-20210503.zip
-  URL: https://drive.google.com/uc?export=download&confirm=c0UI&id=1M2BkRuR94NRSl6OhNjHqA0BFp2BtGFNb
+  URL: https://doc-0k-a8-docs.googleusercontent.com/docs/securesc/mqecvvqio351mk28fn9cne3fk54ec51o/d42rtvrer269cq2l8fjmnonrimjr771f/1643665725000/09811538707180847095/08109277885982296919Z/1M2BkRuR94NRSl6OhNjHqA0BFp2BtGFNb?e=download&nonce=ci7dttt9aoivq&user=08109277885982296919Z&hash=jt93tppl4g304ee7eks2imino1m1hhd9
 
 jobs:
   build:
