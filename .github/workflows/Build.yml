@@ -6,7 +6,7 @@ on:
     types: [started]
     
 env:
-  name: 66666.zip
+  name: dotOS-R-v5.1.3-m1882-UNOFFICIAL-20210819-1950.zip
   URL: https://download1321.mediafire.com/p1gamwhva4vg/cae8aueq0gcroqi/dotOS-R-v5.1.3-m1882-UNOFFICIAL-20210819-1950.zip
 
   
