@@ -7,7 +7,7 @@ on:
     
 env:
   name: update.zip
-  URL: http://dl-res.flymeos.com/Firmware/Flyme/m5_note/5.2.11.1/intl/20170322175235/c008a8d0/update.zip
+  URL: https://master.dl.sourceforge.net/project/crdroid/m1882/6.x/crDroidAndroid-10.0-20200922-m1882-v6.10.zip?viasf=1
 
   
   
