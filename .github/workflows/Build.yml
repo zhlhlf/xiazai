@@ -6,8 +6,8 @@ on:
     types: [started]
     
 env:
-  name: MK100.0-m1882-202205250345-NIGHTLY.zip
-  URL: https://us-dl.mokeedev.com/firmware/TUsxMDAuMC1tMTg4Mi0yMDIyMDUyNTAzNDUtTklHSFRMWS56aXB8ZmlybXdhcmV8MTY1MzU5ODI1MA/MK100.0-m1882-202205250345-NIGHTLY.zip
+  name: MK100.0-m1882-220512-RELEASE.zip
+  URL: https://us-dl.mokeedev.com/firmware/TUsxMDAuMC1tMTg4Mi0yMjA1MTItUkVMRUFTRS56aXB8ZmlybXdhcmV8MTY1MzU5ODY0OA/MK100.0-m1882-220512-RELEASE.zip
 
   
   
