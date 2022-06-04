@@ -7,10 +7,10 @@ on:
     
 env:
   name: dotOS-R-v5.0.0-m1882-UNOFFICIAL-20210210-0330.zip
-  URL: https://doc-14-7c-docs.googleusercontent.com/docs/securesc/ha0ro937gcuc7l7deffksulhg5h7mbp1/hrsrmkqtn99dp7nuch8t2ttjlqjp0898/1653628725000/10294200703401775437/*/1ly1NmBkU5vM3nguPTjN3qeKyUY2RlY5X?e=download|
+  URL: https://ava1.androidfilehost.com/dl/RrbGBwLEBOWQMihkMf5b3w/1654439864/961840155545592306/lineage_p9000-ota-ec5aeedfbd.zip?
 
   
-  
+  https://ava1.androidfilehost.com/dl/RrbGBwLEBOWQMihkMf5b3w/1654439864/961840155545592306/lineage_p9000-ota-ec5aeedfbd.zip?
 jobs:
   build:
     runs-on: ubuntu-latest
