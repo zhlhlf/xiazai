@@ -10,7 +10,6 @@ env:
   URL: https://ava1.androidfilehost.com/dl/RrbGBwLEBOWQMihkMf5b3w/1654439864/961840155545592306/lineage_p9000-ota-ec5aeedfbd.zip?
 
   
-  https://ava1.androidfilehost.com/dl/RrbGBwLEBOWQMihkMf5b3w/1654439864/961840155545592306/lineage_p9000-ota-ec5aeedfbd.zip?
 jobs:
   build:
     runs-on: ubuntu-latest
