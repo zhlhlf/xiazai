@@ -6,8 +6,8 @@ on:
     types: [started]
     
 env:
-  name: 66.7z
-  URL: https://148dw3-my.sharepoint.com/personal/lzy_148dw3_onmicrosoft_com/_layouts/15/download.aspx?SourceUrl=%2Fpersonal%2Flzy%5F148dw3%5Fonmicrosoft%5Fcom%2FDocuments%2FLZY%2FSGSI%2FMIUI%2FCN%2F2022%2E06%2E11%2DCC9Pro%2DVNDK29%2E30%2FMIUI13%2E1%2E6%2E0%2DCC9Pro%2D11%2DAB%2DDell%2D2%2E82GB%2DLZY%2DSGSI%2E7z
+  name: crDroidAndroid-10.0-20201217-m1882-v6.13.zip
+  URL: https://deac-ams.dl.sourceforge.net/project/crdroid/m1882/6.x/crDroidAndroid-10.0-20201217-m1882-v6.13.zip
 
   
 jobs:
