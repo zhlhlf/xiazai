@@ -9,7 +9,7 @@ env:
   name: lineage-19.1-20220528-UNOFFICIAL-wt88047x.zip
   URL: https://udomain.dl.sourceforge.net/project/tipzbuilds/ROMs/Xiaomi%20Redmi%202/LineageOS%2019.1/lineage-19.1-20220528-UNOFFICIAL-wt88047x.zip
 
-  |
+  
 jobs:
   build:
     runs-on: ubuntu-latest
