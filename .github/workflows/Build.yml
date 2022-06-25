@@ -7,7 +7,7 @@ on:
     
 env:
   name: lineage-19.1-20220528-UNOFFICIAL-wt88047x.zip
-  URL: https://udomain.dl.sourceforge.net/project/tipzbuilds/ROMs/Xiaomi%20Redmi%202/LineageOS%2019.1/lineage-19.1-20220528-UNOFFICIAL-wt88047x.zip
+  URL: https://altushost-swe.dl.sourceforge.net/project/crdroid/m1882/6.x/crDroidAndroid-10.0-20201217-m1882-v6.13.zip
 
   
 jobs:
