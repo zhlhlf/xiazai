@@ -7,7 +7,7 @@ on:
     
 env:
   name: RROS.zip
-  URL: https://doc-0k-bs-docs.googleusercontent.com/docs/securesc/d69ng8mgqm0eplgln0cvupt38j0a50f3/kqugkneh403altit3op6jqujskafcr0o/1657722300000/10294200703401775437/11292725951787006654Z/16F8TfwVRAlKH7hUH_RT421dnjHAv5Mb8?e=download&uuid=db27db9b-57d0-4114-b2d7-33096833781b
+  URL: https://liquidtelecom.dl.sourceforge.net/project/crdroid/m1882/6.x/crDroidAndroid-10.0-20201217-m1882-v6.13.zip
 
   
 jobs:
