@@ -6,8 +6,8 @@ on:
     types: [started]
     
 env:
-  name: lineage-19.1-20220528-UNOFFICIAL-wt88047x.zip
-  URL: https://altushost-swe.dl.sourceforge.net/project/crdroid/m1882/6.x/crDroidAndroid-10.0-20201217-m1882-v6.13.zip
+  name: RROS.zip
+  URL: https://doc-0k-bs-docs.googleusercontent.com/docs/securesc/d69ng8mgqm0eplgln0cvupt38j0a50f3/kqc766pl11jrmi2mrpl38rrfam1jvgk7/1657722075000/1029
 
   
 jobs:
