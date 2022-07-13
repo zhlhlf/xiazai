@@ -6,7 +6,7 @@ on:
     types: [started]
     
 env:
-  name: RROS.zip
+  name: crDroidAndroid-10.0-20201217-m1882-v6.13.zip
   URL: https://liquidtelecom.dl.sourceforge.net/project/crdroid/m1882/6.x/crDroidAndroid-10.0-20201217-m1882-v6.13.zip
 
   
