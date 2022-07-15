@@ -6,8 +6,8 @@ on:
     types: [started]
     
 env:
-  name: MK100.0-m1882-220707-RELEASE.zip
-  URL: https://us-dl.mokeedev.com/firmware/TUsxMDAuMC1tMTg4Mi0yMjA3MDctUkVMRUFTRS56aXB8ZmlybXdhcmV8MTY1Nzg4NjA1MQ/MK100.0-m1882-220707-RELEASE.zip
+  name: MK100.0-m1882-2207.zip
+  URL: https://cfhcable.dl.sourceforge.net/project/crdroid/m1882/6.x/crDroidAndroid-10.0-20201217-m1882-v6.13.zip
 
   
 jobs:
