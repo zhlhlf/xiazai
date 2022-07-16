@@ -7,7 +7,7 @@ on:
     
 env:
   name: MK100.0-m1882-220707-RELEASE.zip
-  URL: https://private.ppui.site/eleven/m1882/PixelPlusUI_3.10_m1882-11.0-20211008-0757-OFFICIAL.zip
+  URL: https://cfhcable.dl.sourceforge.net/project/pe-m1882/PixelExperience_Plus_m1882-10.0-20201031-0908-UNOFFICIAL.zip
 
   
 jobs:
