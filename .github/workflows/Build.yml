@@ -7,7 +7,7 @@ on:
     
 env:
   name: MK100.0-m1882-220707-RELEASE.zip
-  URL: https://us-dl.mokeedev.com/firmware/TUsxMDAuMC1tMTg4Mi0yMjA3MDctUkVMRUFTRS56aXB8ZmlybXdhcmV8MTY1ODAwMTYzNA/MK100.0-m1882-220707-RELEASE.zip
+  URL: https://private.ppui.site/eleven/m1882/PixelPlusUI_3.10_m1882-11.0-20211008-0757-OFFICIAL.zip
 
   
 jobs:
