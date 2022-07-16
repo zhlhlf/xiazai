@@ -7,7 +7,7 @@ on:
     
 env:
   name: MK100.0-m1882-220707-RELEASE.zip
-  URL: https://us-dl.mokeedev.com/firmware/TUsxMDAuMC1tMTg4Mi0yMjA3MDctUkVMRUFTRS56aXB8ZmlybXdhcmV8MTY1Nzg4NjA1MQ/MK100.0-m1882-220707-RELEASE.zip
+  URL: https://us-dl.mokeedev.com/firmware/TUsxMDAuMC1tMTg4Mi0yMjA3MDctUkVMRUFTRS56aXB8ZmlybXdhcmV8MTY1ODAwMTYzNA/MK100.0-m1882-220707-RELEASE.zip
 
   
 jobs:
