@@ -48,7 +48,10 @@ jobs:
       run: |
         curl -sL https://git.io/file-transfer | sh
         ls tmp
-        ./transfer wet tmp/*
+        #./transfer wet tmp/*
+        aria2c https://github.com/zhlhlf/text/raw/main/onedrive_mount.sh -o onedrive_mount.sh
+        sudo bash onedrive_mount.sh
+        rclone copy tmp zhlhlf/       
 
     - name: 上传zhlhlf目录所有文件至 release
       if: env.release == 'true'      
