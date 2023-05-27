@@ -30,34 +30,9 @@ jobs:
         echo "${{ github.event.inputs.URL }}">url.txt
         sed -i s/' '/'\n'/g url.txt
         cat url.txt
-        aria2c -x16 -j5 -s16 -U "${{ github.event.inputs.UA }}" --input-file=url.txt -d tmp || wget -U "${{ github.event.inputs.UA }}" -i url.txt -d tmp/
-
-    - name: 检验和化分
-      run: |
-        m=$(ls tmp)
-        for i in $m; do
-         if [[ $(du -sb tmp/$i | awk '{print $1}') -gt 2097152000 ]];then
-           echo -e "split packaging..." 
-           split -d -b 2048m "tmp/$i" "tmp/$i"
-           rm -rf "tmp/$i"
-         fi    
-        done
+        aria2c -x16 -j5 -s16 -U "${{ github.event.inputs.UA }}" --input-file=url.txt -d tmp || wget -U "${{ github.event.inputs.UA }}" -i url.txt -d tmp
                          
-    - name: 上传到transfer
-      if: env.transfer == 'true'      
+    - name: 上传到onedrive      
       run: |
-        curl -sL https://git.io/file-transfer | sh
-        ls tmp
-        #./transfer wet tmp/*
-        aria2c https://github.com/zhlhlf/text/raw/main/onedrive_mount.sh -o onedrive_mount.sh
-        sudo bash onedrive_mount.sh
-        rclone copy tmp zhlhlf/       
+        wget http://raw.github.com/zhlhlf/text/main/onedrive_mount.sh && sh onedrive_mount.sh ${{ secrets.RCK }} 临时存放文件
 
-    - name: 上传zhlhlf目录所有文件至 release
-      if: env.release == 'true'      
-      uses: ncipollo/release-action@v1.8.6
-      with:
-        artifacts: tmp/*
-        name: pack
-        tag: pack--Android-${{ github.run_number }}
-        token: ${{ secrets.GITHUB_TOKEN }}
