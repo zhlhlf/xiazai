@@ -30,7 +30,7 @@ jobs:
         echo "${{ github.event.inputs.URL }}">url.txt
         sed -i s/' '/'\n'/g url.txt
         cat url.txt
-        aria2c -x16 -j5 -s16 -U "${{ github.event.inputs.UA }}" --input-file=url.txt -d tmp || wget -U "${{ github.event.inputs.UA }}" -i url.txt -d tmp
+        aria2c -x16 -j5 -s16 -U "${{ github.event.inputs.UA }}" --input-file=url.txt -d 666 || wget -U "${{ github.event.inputs.UA }}" -i url.txt -d 666
                          
     - name: 上传到onedrive      
       run: |
