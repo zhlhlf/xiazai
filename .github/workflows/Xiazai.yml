@@ -54,6 +54,10 @@ jobs:
         done
 
     - name: 上传文件
-      if: github.event.inputs.upload == 'wet'
       run: |
-        wget -q https://raw.github.com/zhlhlf/text/main/onedrive_mount.sh && sh onedrive_mount.sh ${{ secrets.RCK }} 临时存放文件
+        if [ ${{ github.event.inputs.upload }} = "we" ]; then
+           wget https://raw.githubusercontent.com/zhlhlf/text/main/upload-wetransfer.py
+           for i in $(ls 666/) ; do python upload-wetransfer.py -u 666/$i ; done
+        else
+           wget -q https://raw.github.com/zhlhlf/text/main/onedrive_mount.sh && sh onedrive_mount.sh ${{ secrets.RCK }} 临时存放文件
+        fi
