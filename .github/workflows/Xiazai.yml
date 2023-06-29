@@ -12,10 +12,19 @@ on:
         description: 'UA'
         required: true
         default: 'LogStatistic'
+
+      upload:
+        description: 'upload'
+        required: true
+        default: ''
+      
+      split:
+        description: 'split'
+        required: true
+        default: 'false'
+        type: boolean
         
-env:
-  transfer: true
-  release: true6
+      
   
 jobs:
   build:
@@ -33,6 +42,7 @@ jobs:
         aria2c -x10 -U "${{ github.event.inputs.UA }}" --input-file=url.txt -d 666 || wget -U "${{ github.event.inputs.UA }}" -i url.txt -d 666
            
     - name: 检验和化分
+      if: github.event.inputs.split == 'true'
       run: |
         m=$(ls 666)
         for i in $m; do
@@ -43,7 +53,7 @@ jobs:
          fi    
         done
 
-    - name: 上传到onedrive      
+    - name: 上传文件
+      if: github.event.inputs.upload == 'wet'
       run: |
         wget -q https://raw.github.com/zhlhlf/text/main/onedrive_mount.sh && sh onedrive_mount.sh ${{ secrets.RCK }} 临时存放文件
-
