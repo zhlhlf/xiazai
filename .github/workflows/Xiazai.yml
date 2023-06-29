@@ -14,9 +14,9 @@ on:
         default: 'LogStatistic'
 
       upload:
-        description: 'upload'
+        description: 'we or onedrive'
         required: true
-        default: ''
+        default: 'we'
       
       split:
         description: 'split'
