@@ -59,5 +59,18 @@ jobs:
            wget -q https://raw.github.com/zhlhlf/text/main/onedrive_mount.sh && sh onedrive_mount.sh ${{ secrets.RCK }} 临时存放文件         
         else
            curl -sL https://git.io/file-transfer | sh 
-           for i in $(ls 666/) ; do ./transfer ${{ github.event.inputs.upload }} "666/$i" ; done
+           list=$(find 666/*)
+            i=1
+            while true
+            do
+            tt=$(sed -n ${i}p <<end
+            $list
+            end
+            )
+            i=$(($i+1))
+            if [ ! "$tt" ];then
+                break
+            fi
+            ./transfer ${{ github.event.inputs.upload }} "$tt"
+            done
         fi
