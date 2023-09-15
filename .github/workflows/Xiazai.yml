@@ -14,9 +14,9 @@ on:
         default: 'LogStatistic'
 
       upload:
-        description: 'one wss '
-        required: false
-        default: 'wss'
+        description: 'fio one wss '
+        required: true
+        default: 'fio'
       
       split:
         description: 'split'
@@ -25,7 +25,6 @@ on:
         type: boolean
         
       
-  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -60,9 +59,5 @@ jobs:
         else
            curl -sL https://git.io/file-transfer | sh 
            aa=${{ github.event.inputs.upload }}
-           if [ $aa = "@" ];then
-              sh transfer.sh " "
-           else
-              sh transfer.sh $aa
-           fi
+           sh transfer.sh $aa
         fi
