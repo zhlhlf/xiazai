@@ -16,7 +16,7 @@ on:
       upload:
         description: 'one wss '
         required: false
-        default: 'we'
+        default: 'wss'
       
       split:
         description: 'split'
