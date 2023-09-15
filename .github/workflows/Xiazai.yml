@@ -14,8 +14,8 @@ on:
         default: 'LogStatistic'
 
       upload:
-        description: 'we or onedrive'
-        required: true
+        description: 'one wss '
+        required: false
         default: 'we'
       
       split:
@@ -55,9 +55,9 @@ jobs:
 
     - name: 上传文件
       run: |
-        if [ ${{ github.event.inputs.upload }} = "we" ]; then
-           wget -q https://raw.githubusercontent.com/zhlhlf/text/main/upload-wetransfer.py
-           for i in $(ls 666/) ; do python upload-wetransfer.py -u "666/$i" ; done
+        if [ ${{ github.event.inputs.upload }} = "one" ]; then
+           wget -q https://raw.github.com/zhlhlf/text/main/onedrive_mount.sh && sh onedrive_mount.sh ${{ secrets.RCK }} 临时存放文件         
         else
-           wget -q https://raw.github.com/zhlhlf/text/main/onedrive_mount.sh && sh onedrive_mount.sh ${{ secrets.RCK }} 临时存放文件
+           curl -sL https://git.io/file-transfer | sh 
+           for i in $(ls 666/) ; do ./transfer ${{ github.event.inputs.upload }} "666/$i" ; done
         fi
