@@ -16,7 +16,7 @@ on:
       upload:
         description: 'fio one wss '
         required: true
-        default: 'fio'
+        default: 'one'
       
       split:
         description: 'split'
