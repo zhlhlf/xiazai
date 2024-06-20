@@ -8,6 +8,11 @@ on:
         required: true
         default: ''
 
+      xcs:
+        description: '线程数'
+        required: true
+        default: '10'
+
       UA:
         description: 'UA'
         required: true
@@ -38,7 +43,7 @@ jobs:
         echo "${{ github.event.inputs.URL }}">url.txt
         sed -i s/' '/'\n'/g url.txt
         cat url.txt
-        aria2c -x10 -U "${{ github.event.inputs.UA }}" --input-file=url.txt -d 666 || wget -U "${{ github.event.inputs.UA }}" -i url.txt -d 666
+        aria2c -x${{ github.event.inputs.xcs }} -U "${{ github.event.inputs.UA }}" --input-file=url.txt -d 666 || wget -U "${{ github.event.inputs.UA }}" -i url.txt -d 666
            
     - name: 检验和化分
       if: github.event.inputs.split == 'true'
