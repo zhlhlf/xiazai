@@ -63,9 +63,5 @@ jobs:
            wget -q https://raw.github.com/zhlhlf/text/main/onedrive_mount.sh && sh onedrive_mount.sh ${{ secrets.RCK }} 临时存放文件         
         elif [ ${{ github.event.inputs.upload }} = "wet" ];then
            wget https://raw.githubusercontent.com/zhlhlf/text/main/upload-wetransfer.py
-           python upload-wetransfer.py "$(ls 666/*)"
-        else
-           curl -sL https://git.io/file-transfer | sh 
-           aa=${{ github.event.inputs.upload }}
-           sh transfer.sh $aa
+           python upload-wetransfer.py 666/*
         fi
