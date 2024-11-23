@@ -6,7 +6,7 @@ for i in $1;do
     if [ `echo "$i" | grep "google.com/download"` ];then
         i=`./dGoogleUrl.sh "$i"`
         echo $i
-    elif [ `echo "$i" | grep "pronhub.com"` ];then
+    elif [ `echo "$i" | grep "pornhub.com"` ];then
         ./d_pronhub.sh "$i"
         continue
     fi
