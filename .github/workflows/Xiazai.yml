@@ -40,28 +40,13 @@ jobs:
 
     - name: 下载
       run: |
-        echo "${{ github.event.inputs.URL }}">url.txt
-        sed -i s/' '/'\n'/g url.txt
-        cat url.txt
-        aria2c -x${{ github.event.inputs.xcs }} -U "${{ github.event.inputs.UA }}" --input-file=url.txt -d 666 || wget -U "${{ github.event.inputs.UA }}" -i url.txt -d 666
+        ./download.sh "${{ github.event.inputs.URL }}" "${{ github.event.inputs.xcs }}" "${{ github.event.inputs.UA }}"
            
     - name: 检验和化分
       if: github.event.inputs.split == 'true'
       run: |
-        m=$(ls 666)
-        for i in $m; do
-         if [[ $(du -sb 666/$i | awk '{print $1}') -gt 2097152000 ]];then
-           echo -e "split packaging..." 
-           split -d -b 2048m "666/$i" "666/$i"
-           rm -rf "666/$i"
-         fi    
-        done
+        ./split.sh
 
     - name: 上传文件
       run: |
-        if [ ${{ github.event.inputs.upload }} = "one" ]; then
-           wget -q https://raw.github.com/zhlhlf/text/main/onedrive_mount.sh && sh onedrive_mount.sh ${{ secrets.RCK }} 临时存放文件         
-        elif [ ${{ github.event.inputs.upload }} = "wet" ];then
-           wget https://raw.githubusercontent.com/zhlhlf/text/main/upload-wetransfer.py
-           python upload-wetransfer.py 666/*
-        fi
+        ./upload.sh ${{ github.event.inputs.upload }}
