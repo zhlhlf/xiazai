@@ -1,9 +1,9 @@
 #!/bin/sh
 
-for i in $1;do
+rm -rf dGoogleUrl.sh; wget -q https://raw.githubusercontent.com/zhlhlf/text/refs/heads/main/dGoogleUrl.sh ; chmod 777 * -R
 
+for i in $1;do
     if [ `echo "$i" | grep "google.com/download"` ];then
-    rm -rf dGoogleUrl.sh; wget -q https://raw.githubusercontent.com/zhlhlf/text/refs/heads/main/dGoogleUrl.sh
         i=`./dGoogleUrl.sh "$i"`
     elif [ `echo "$i" | grep "pronhub.com"` ];then
         ./d_pronhub.sh "$i"
