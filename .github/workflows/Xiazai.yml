@@ -1,0 +1,60 @@
+name: Xiazai
+
+on:
+  workflow_dispatch:
+    inputs:
+      URL:
+        description: 'URL'
+        required: true
+        default: ''
+
+      xcs:
+        description: '线程数'
+        required: true
+        default: '10'
+
+      UA:
+        description: 'UA'
+        required: true
+        default: 'LogStatistic'
+
+      upload:
+        description: '[one,one tyy2/临时存放文件,wet]'
+        required: true
+        default: 'one'
+      
+      split:
+        description: 'split'
+        required: true
+        default: 'false'
+        type: boolean
+        
+      
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 更改交换空间并link构建空间
+        uses: zhlhlf/maximize-build-space@master
+        with:
+          swap-size-mb: 8192
+              
+      - name: Checkout
+        uses: actions/checkout@master
+  
+      - name: 下载
+        run: |
+          rm -rf 666
+          mkdir 666
+          chmod 777 * -R
+          ./download.sh "${{ github.event.inputs.URL }}" "${{ github.event.inputs.xcs }}" "${{ github.event.inputs.UA }}"
+             
+      - name: 检验和化分
+        if: github.event.inputs.split == 'true'
+        run: |
+          ./split.sh
+  
+      - name: 上传文件
+        run: |
+          ./upload.sh "${{ github.event.inputs.upload }}" "${{ secrets.RCK }}"
