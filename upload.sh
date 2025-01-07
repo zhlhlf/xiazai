@@ -1,3 +1,5 @@
+#!/bin/bash
+
 type_dir=$1
 rclone_key=$2
 

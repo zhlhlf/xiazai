@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 urls="$1"; 
 sudo apt install -y youtube-dl >> /dev/null
 
@@ -8,6 +8,8 @@ for i in $urls;
 do  
     
     name=`curl -sL $i | grep inlineFree | cut -d'>' -f 2 | cut -d'<' -f 1`
-    youtube-dl -o "${name:0:65}.%(ext)s" $i --external-downloader aria2c --external-downloader-args "-x10" 
+    name="${name:0:65}"
+    youtube-dl -o "$name.%(ext)s" $i --external-downloader aria2c --external-downloader-args "-x10"
+    echo $name
 
 done
