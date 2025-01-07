@@ -2,6 +2,7 @@
 
 rm -rf dGoogleUrl.sh; wget -q https://raw.githubusercontent.com/zhlhlf/text/refs/heads/main/dGoogleUrl.sh ; chmod 777 * -R
 rm -rf upload-wetransfer.py; wget -q https://github.com/zhlhlf/text/raw/refs/heads/main/upload/upload-wetransfer.py
+apt install -y youtube-dl >> /dev/null
    
 for i in $1;do
     if [ `echo "$i" | grep "google.com/download"` ];then
