@@ -1,5 +1,7 @@
 #!/bin/sh
 urls="$1"; 
+sudo apt install -y youtube-dl >> /dev/null
+
 cd 666
 
 for i in $urls;
