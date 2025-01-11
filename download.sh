@@ -10,6 +10,7 @@ for i in $1;do
         ./d_pronhub.sh "$i"
         continue
     fi
+    echo "UA: $3"
     aria2c -x$2 -U "$3" "$i" -d 666
 
 done
