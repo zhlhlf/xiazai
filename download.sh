@@ -5,7 +5,7 @@ asd(){
     while true;do
         echo > a.log
         sleep 6
-        tail -n1 a.log
+        tail -n2 a.log
     done
 }
 
