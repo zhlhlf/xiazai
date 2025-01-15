@@ -4,7 +4,7 @@
 asd(){
     while true;do
         sleep 6
-        tail -n$count a.log
+        tail -n1 a.log
         echo > a.log
     done
 }
