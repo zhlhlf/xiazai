@@ -9,7 +9,7 @@ do
     #获取名字
     name=`curl -sL $i | grep inlineFree | cut -d'>' -f 2 | cut -d'<' -f 1`
     #name限制
-    name=$(echo "$name" | perl -C -pe 's/[^a-zA-Z0-9\p{Han}\p{Hiragana}\p{Katakana}]//g')
+    name=$(echo "$name" | perl -C -pe 's/[^a-zA-Z0-9 \p{Han}\p{Hiragana}\p{Katakana}\x{1F200}-\x{1F251}]//g')
     #限制长度为60
     name="${name:0:60}"
   
