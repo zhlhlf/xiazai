@@ -1,6 +1,6 @@
 #!/bin/bash
 urls="$1"; 
-sudo pip install -g youtube-dl >> /dev/null
+sudo pip install youtube-dl >> /dev/null
 
 cd 666
 
