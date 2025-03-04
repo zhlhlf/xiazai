@@ -1,6 +1,6 @@
 #!/bin/bash
 urls="$1"; 
-sudo apt install -y youtube-dl >> /dev/null
+sudo pip install youtube-dl >> /dev/null
 
 cd 666
 
