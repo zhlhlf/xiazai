@@ -1,16 +1,6 @@
 #!/bin/bash
 
 
-asd(){
-    while true;do
-        echo > a.log
-        sleep 6
-        tail -n2 a.log
-    done
-}
-
-asd &
-pid=$!
    
 for i in $1;do
     if [ `echo "$i" | grep "google.com/download"` ];then
@@ -22,8 +12,7 @@ for i in $1;do
         continue
     fi
     echo "UA: $3"
-    aria2c -x$2 -U "$3" "$i" -d 666 > a.log
+    aria2c -x$2 -U "$3" "$i" -d 666
 
 done
 
-kill -8 $pid

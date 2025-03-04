@@ -13,7 +13,7 @@ do
     #限制长度为60
     name="${name:0:60}"
   
-    youtube-dl -o "$name.%(ext)s" $i --external-downloader aria2c --external-downloader-args "-x10" > ../a.log
+    youtube-dl -o "$name.%(ext)s" $i --external-downloader aria2c --external-downloader-args "-x10" 
     echo $name
 
 done
