@@ -16,3 +16,4 @@ for i in $1;do
 
 done
 
+# . ./modify_videos_md5.sh
