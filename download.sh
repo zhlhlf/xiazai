@@ -4,7 +4,7 @@ mkdir -p 666
 cd 666
 
 logfile=a.log
-
+touch $logfile
 asd(){
     while true;do
         sleep 3
