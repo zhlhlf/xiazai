@@ -40,3 +40,5 @@ for i in $1; do
     aria2c -x$2 -U "$3" "$i" >> a.log 2>&1
 
 done
+
+rm -rf $logfile
