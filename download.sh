@@ -3,6 +3,17 @@
 mkdir -p 666
 cd 666
 
+logfile=a.log
+
+asd(){
+    while true;do
+        sleep 3
+        tail -n 5 $logfile
+        echo
+    done
+}
+asd &
+
 y_weblist="pornhub.com www.xvideos.com"
 
 for i in $1; do
@@ -26,6 +37,6 @@ for i in $1; do
         fi
     fi
     echo "UA: $3"
-    aria2c -x$2 -U "$3" "$i"
+    aria2c -x$2 -U "$3" "$i" >> a.log 2>&1
 
 done
