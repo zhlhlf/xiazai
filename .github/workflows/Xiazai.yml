@@ -32,7 +32,7 @@ on:
       
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
       - name: 更改交换空间并link构建空间
@@ -58,3 +58,11 @@ jobs:
       - name: 上传文件
         run: |
           ./upload.sh "${{ github.event.inputs.upload }}" "${{ secrets.RCK }}"
+
+      - name: Delete old workflow run
+        uses: Mattraks/delete-workflow-runs@main
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          retain_days: 2
+          keep_minimum_runs: 2

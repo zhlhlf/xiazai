@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 m=$(ls 666)
 for i in $m; do
