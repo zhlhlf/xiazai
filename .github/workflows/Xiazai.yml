@@ -20,8 +20,8 @@ on:
 
       upload:
         description: '123 tyy2/short_time_files tyy2_crypt'
-        required: true
-        default: 'tyy2/short_time_files'
+        required: false
+        default: ''
       
       split:
         description: 'split'
