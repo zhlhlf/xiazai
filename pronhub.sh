@@ -1,7 +1,7 @@
 #!/bin/bash
 i="$1"
 
-sudo pip install youtube-dl >>/dev/null
+sudo apt install ffmpeg >>/dev/null
 
 name=$(curl -sL "$i" | grep '<title>' | cut -d\> -f 2 | awk -F- '{for(i=1;i<NF;i++) printf "%s%s", $i, (i==NF-1?"":FS)}')
 name=$(echo "$name" | sed 's#/#-#g' | sed 's/[[:space:]]*$//')
