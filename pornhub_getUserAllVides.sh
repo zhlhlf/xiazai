@@ -1,0 +1,30 @@
+
+url1="${1}?page="
+
+echo >b.txt
+i=1
+filename=""
+
+while true; do
+	url="${url1}$i"
+	curl -sL $url >b
+	if [ ! "$filename" ];then
+		s=`cat b | grep -n "h1 itemprop=" | cut -d\: -f1`
+		let s=s+1
+		filename=`cat b | sed -n ${s}p | cut -d\< -f1 | sed 's/^[ \t]*//' | sed 's/[ \t]*$//'`
+		echo "影片作者: $filename"
+	fi
+	if grep -q "查找失败" b; then
+		break
+	fi
+
+	cat b | grep view_video.php?viewkey= | grep title | grep "a href" | awk -F"href" '{print $2}' | awk -F\" '{print $2}' | sed 's/^/https:\/\/cn.pornhub.com/' >>b.txt
+
+	echo "page: $i"
+	echo $url
+
+	let i=i+1
+done
+rm -rf b
+
+mv b.txt "$filename.txt"
