@@ -1,10 +1,10 @@
-
+echo ${1}
 url1="${1}?page="
 
 echo >b.txt
 i=1
 filename=""
-
+mkdir -p tmp
 while true; do
 	url="${url1}$i"
 	curl -sL $url >b
@@ -17,14 +17,14 @@ while true; do
 	if grep -q "查找失败" b; then
 		break
 	fi
-
+	toline=`cat b | grep showMoreLess -n | cut -d\: -f1`
+	sed -i "1,${toline}d" b
 	cat b | grep view_video.php?viewkey= | grep title | grep "a href" | awk -F"href" '{print $2}' | awk -F\" '{print $2}' | sed 's/^/https:\/\/cn.pornhub.com/' >>b.txt
 
 	echo "page: $i"
-	echo $url
 
 	let i=i+1
 done
 rm -rf b
 
-mv b.txt "$filename.txt"
+mv b.txt "tmp/$filename.txt"
