@@ -10,14 +10,14 @@ for i in $1; do
         chmod 777 * -R
         i=$(./dGoogleUrl.sh "$i")
         echo $i
-    elif [ $(echo "$i" | grep "pornhub.com") ]; then
+    elif [ $(echo "$i" | grep "https://cn.pornhub.com/model/") ]; then
         ../pornhub_getUserAllVides.sh "$i"
         u_list=`cat tmp/*.txt`
         rm -rf tmp
         cd ..
         ./download.sh "$u_list"
         continue
-    elif [ $(echo "$i" | grep "https://cn.pornhub.com/model/") ]; then
+    elif [ $(echo "$i" | grep "pornhub.com") ]; then
         ../pornhub.sh "$i"
         continue
     elif [ $(echo "$i" | grep "www.xvideos.com") ]; then
