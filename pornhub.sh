@@ -7,4 +7,4 @@ name=$(curl -sL "$i" | grep '<title>' | cut -d\> -f 2 | awk -F- '{for(i=1;i<NF;i
 name=$(echo "$name" | sed 's#/#-#g' | sed 's/[[:space:]]*$//')
 echo "$name"
 
-youtube-dl -o "%(uploader)s - $name.%(ext)s" "$i" --external-downloader aria2c --external-downloader-args "-x10" >> $logfile 2>&1
+nohup youtube-dl -o "%(uploader)s - $name.%(ext)s" "$i" --external-downloader aria2c --external-downloader-args "-x10" >> $logfile 2>&1

@@ -48,7 +48,7 @@ for i in $1; do
         continue
     fi
     echo "UA: $3"
-    aria2c -x$2 -U "$3" "$i" >>$logfile 2>&1
+    aria2c -x$2 -U "$3" "$i" >> $logfile 2>&1
 
 done
 
