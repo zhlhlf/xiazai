@@ -1,6 +1,6 @@
 #!/bin/bash
 
-logfile="$(pwd)/dl.log"
+export logfile="$(pwd)/dl.log"
 touch $logfile
 
 mkdir -p 666
@@ -41,7 +41,7 @@ for i in $1; do
         ./download.sh "$u_list"
         continue
     elif [ $(echo "$i" | grep "pornhub.com") ]; then
-        ../pornhub.sh "$i" "$logfile"
+        ../pornhub.sh "$i"
         continue
     elif [ $(echo "$i" | grep "www.xvideos.com") ]; then
         ../xvideos.sh "$i"
