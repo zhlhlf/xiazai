@@ -1,8 +1,7 @@
 #!/bin/bash
 
-logfile="$pwd/dl.log"
+logfile="$(pwd)/dl.log"
 touch $logfile
-chmod 777 $logfile
 
 mkdir -p 666
 cd 666
