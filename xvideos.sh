@@ -13,4 +13,4 @@ base_vide=`curl -sL $URL | grep hls- | sort | head -n1 `
 final_m3m8="$(dirname $URL)/$base_vide"
 echo "下载链接：$final_m3m8"
 
-ffmpeg -i "$final_m3m8" -c copy "$name.mp4" -loglevel warning
+ffmpeg -loglevel error -i "$final_m3m8" -c:v copy -c:a copy -bsf:v trace_headers -movflags +faststart "$name.mp4"

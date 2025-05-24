@@ -7,15 +7,15 @@ mkdir -p 666
 cd 666
 
 
-asd(){
-    while true;do
-        sleep 5
-        tail -n 1 $logfile
-        echo
-    done
-}
+# asd(){
+#     while true;do
+#         sleep 5
+#         tail -n 1 $logfile
+#         echo
+#     done
+# }
 
-asd &
+# asd &
 
 out_pid=$!
 
@@ -52,6 +52,6 @@ for i in $1; do
 
 done
 
-kill $out_pid
+kill $out_pid >> /dev/null 2>&1
 rm -rf $logfile
 
