@@ -18,7 +18,7 @@ while true; do
         break
     fi
     for i in $list; do
-        echo > "https://www.xvideos.com$i" tmp/$author.txt
+        echo "https://www.xvideos.com$i" >> tmp/$author.txt
     done
     num=$((num + 1))
 done
