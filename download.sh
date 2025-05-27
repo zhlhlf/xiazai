@@ -43,8 +43,15 @@ for i in $1; do
     elif [ $(echo "$i" | grep "pornhub.com") ]; then
         ../pornhub.sh "$i"
         continue
-    elif [ $(echo "$i" | grep "www.xvideos.com") ]; then
+    elif [ $(echo "$i" | grep "www.xvideos.com.*prof-video-click") ]; then
         ../xvideos.sh "$i"
+        continue
+    elif [ $(echo "$i" | grep "www.xvideos.com") ]; then
+        ../xvideos_getUserAllVides.sh "$i"
+        u_list=`cat tmp/*.txt`
+        rm -rf tmp
+        cd ..
+        ./download.sh "$u_list"
         continue
     fi
     echo "UA: $3"

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo ${1}
 url1="${1}?page="
 
