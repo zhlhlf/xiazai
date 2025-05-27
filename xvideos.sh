@@ -6,7 +6,7 @@ sudo apt install ffmpeg >>/dev/null 2>&1
 curl -sL "$i" > a
 author=`grep html5player.setUploaderName a | cut -d \' -f 2`
 name=`grep html5player.setVideoTitle a | cut -d \' -f 2`
-name="$author - $name.mp4"
+name="$author - $name"
 
 URL=`grep 'html5player.setVideoHLS' a | cut -d \' -f2`
 base_vide=`curl -sL $URL | grep hls- | sort | head -n1 `
