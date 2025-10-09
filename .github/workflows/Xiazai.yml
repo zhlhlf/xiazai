@@ -19,9 +19,9 @@ on:
         default: 'LogStatistic'
 
       upload:
-        description: '[one,one tyy2/临时存放文件,wet]'
-        required: true
-        default: 'one'
+        description: '123 tyy2/short_time_files tyy2_crypt'
+        required: false
+        default: ''
       
       split:
         description: 'split'
@@ -57,4 +57,12 @@ jobs:
   
       - name: 上传文件
         run: |
-          ./upload.sh "${{ github.event.inputs.upload }}" "${{ secrets.RCK }}"
+          curl -sL https://raw.githubusercontent.com/zhlhlf/text/refs/heads/main/upload/upload.sh | bash -s "${{ secrets.RCK }}" "${{ github.event.inputs.upload }}"
+
+      - name: Delete old workflow run
+        uses: Mattraks/delete-workflow-runs@main
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          retain_days: 2
+          keep_minimum_runs: 2
