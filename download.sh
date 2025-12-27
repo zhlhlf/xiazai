@@ -48,12 +48,13 @@ for i in $1; do
         cd 666
         continue
     elif [ ${i: -5} == ".m3u8" ]; then
-        install_if_missing ffmpeg 
-        ffmpeg -loglevel info -threads $(nproc) -i "$i" \
-        -c:v copy -c:a copy \
-        -movflags +faststart \
-        "a.mp4"
-        mv "a.mp4" "$(md5sum "a.mp4" | awk '{ print $1 }').mp4"
+        install_if_missing ffmpeg
+        echo "Downloading m3u8 video: $i"
+        ffmpeg -i "$i" -c copy "temp.mp4"
+        echo "Optimizing video for web playback..."
+        ffmpeg -i "temp.mp4" -c copy -movflags +faststart "final.mp4"
+        mv "final.mp4" "$(md5sum "final.mp4" | awk '{ print $1 }').mp4"
+        rm -rf temp.mp4 final.mp4
     fi
     echo "aria2c  UA: $3"
     aria2c -x$2 -U "$3" "$i" 

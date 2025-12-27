@@ -27,7 +27,6 @@ install_if_missing() {
             return 1
         fi
     else
-        echo "所有命令均已安装，无需操作"
         return 0
     fi
 }
