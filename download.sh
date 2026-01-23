@@ -54,11 +54,11 @@ for i in $1; do
         echo "Optimizing video for web playback..."
         ffmpeg -i "temp.mp4" -c copy -movflags +faststart "final.mp4"
         mv "final.mp4" "$(md5sum "final.mp4" | awk '{ print $1 }').mp4"
-        rm -rf temp.mp4 final.mp4
+        rm -rf temp.mp4 index.m3u8
     fi
     echo "aria2c  UA: $3"
     aria2c -x$2 -U "$3" "$i" 
 
 done
-
+wait
 rm -rf $logfile
