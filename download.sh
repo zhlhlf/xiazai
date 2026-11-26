@@ -11,6 +11,11 @@ fi
 ROOT=$(pwd)
 cd 666
 
+# 新一轮开始时清掉上一轮的待重试清单（重试轮不清）
+if [ "${XIAZAI_RETRY:-0}" != "1" ]; then
+    rm -f lowq.txt failed.txt retried.flag
+fi
+
 
 current=0
 total_params=$(echo "$1" | wc -w)
@@ -28,11 +33,9 @@ for i in $1; do
         echo $i
     elif [ $(echo "$i" | grep "https://cn.pornhub.com/model/") ]; then
         . ../pornhub_getUserAllVides.sh "$i"
-        u_list=$(cat tmp/*.txt)
+        u_list=$(cat tmp/*.txt 2>/dev/null)
         rm -rf tmp
-        cd ..
-        . download.sh "$u_list"
-        cd 666
+        [ -n "$u_list" ] && ( cd "$ROOT" && . ./download.sh "$u_list" )
         continue
     elif [ $(echo "$i" | grep -E "pornhub.com|youtube.com") ]; then
         . ../pornhub.sh "$i"
@@ -61,5 +64,19 @@ for i in $1; do
     aria2c -x$2 -U "$3" "$i" 
 
 done
+
+# 一轮结束后，对「只有低清」和「彻底失败」的链接延迟重试一次（只重试一遍）
+if [ "${XIAZAI_RETRY:-0}" != "1" ] && [ ! -f retried.flag ]; then
+    retry_urls=$(cat lowq.txt failed.txt 2>/dev/null | awk 'NF' | sort -u | tr '\n' ' ')
+    if [ -n "$retry_urls" ]; then
+        cnt=$(printf '%s' "$retry_urls" | wc -w)
+        echo "=== 延迟 ${RETRY_WAIT:-45}s 后重试 $cnt 个（低清/失败） ==="
+        sleep "${RETRY_WAIT:-45}"
+        touch retried.flag
+        rm -f lowq.txt failed.txt
+        ( cd "$ROOT" && XIAZAI_RETRY=1 XIAZAI_ALLOW_LOW=1 ./download.sh "$retry_urls" "$2" "$3" )
+    fi
+fi
+
 wait
 rm -rf $logfile
