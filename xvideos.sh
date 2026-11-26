@@ -22,6 +22,12 @@ for attempt in $(seq 1 "$ATTEMPTS"); do
     low=$(printf '%s' "$page"  | grep -oE "setVideoUrlLow\('[^']*'"  | head -n1 | cut -d"'" -f2)
     author=$(printf '%s' "$page" | grep -oE "setUploaderName\('[^']*'" | head -n1 | cut -d"'" -f2)
     title=$(printf '%s' "$page"  | grep -oE "setVideoTitle\('[^']*'"  | head -n1 | cut -d"'" -f2)
+    # 404 / 已下架：重试也没用，直接跳过
+    if printf '%s' "$page" | grep -qiE '<title>[^<]*(not found|404)|video has been (removed|deleted)|no longer available'; then
+        echo "  视频不存在或已下架（页面标题 Not found），跳过：$i" >&2
+        echo "$i" >> gone.txt
+        return 0
+    fi
     if [ -n "$hls" ]; then
         break
     fi

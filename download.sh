@@ -13,7 +13,7 @@ cd 666
 
 # 新一轮开始时清掉上一轮的待重试清单（重试轮不清）
 if [ "${XIAZAI_RETRY:-0}" != "1" ]; then
-    rm -f lowq.txt failed.txt retried.flag
+    rm -f lowq.txt failed.txt gone.txt retried.flag
 fi
 
 
@@ -64,6 +64,11 @@ for i in $1; do
     aria2c -x$2 -U "$3" "$i" 
 
 done
+
+# 已下架/404 的单独统计（不再重试）
+if [ -s gone.txt ]; then
+    echo "=== 跳过 $(grep -c . gone.txt) 个已下架/404 视频 ==="
+fi
 
 # 一轮结束后，对「只有低清」和「彻底失败」的链接延迟重试一次（只重试一遍）
 if [ "${XIAZAI_RETRY:-0}" != "1" ] && [ ! -f retried.flag ]; then
