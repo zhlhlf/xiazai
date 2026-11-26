@@ -1,0 +1,42 @@
+name: Probe
+
+on:
+  workflow_dispatch:
+    inputs:
+      U:
+        description: 'video url'
+        required: true
+        default: 'https://www.xvideos.com/video.ukiafbf4420/_souai_couple_'
+
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - name: probe
+        run: |
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+          U="${{ github.event.inputs.U }}"
+          echo "URL=$U"
+          curl -sL --compressed -A "$UA" -H 'Accept-Language: en-US,en;q=0.9' -e "https://www.xvideos.com/" -c /tmp/cj -b /tmp/cj -o /tmp/p -D /tmp/h -w 'http=%{http_code} size=%{size_download} ct=%{content_type} final=%{url_effective}\n' "$U" || true
+          echo "--- headers ---"; grep -iE 'HTTP/|^location|content-type' /tmp/h | head -20
+          echo "--- player vars ---"
+          for k in setVideoHLS setVideoUrlHigh setVideoUrlLow setVideoUrl setVideoTitle setUploaderName; do
+            printf '%s: ' "$k"; grep -oE "${k}\('[^']*'" /tmp/p | head -1; echo
+          done
+          echo "--- media urls in page ---"
+          grep -oE 'https?://[^"'"'"' ]*(\.m3u8|/mp4[^"'"'"' ]*|\.mp4[^"'"'"' ]*)' /tmp/p | sort -u | head -20
+          echo "--- meta ---"
+          grep -oE '<meta[^>]*(og:video|twitter:player:stream|og:image)[^>]*>' /tmp/p | head -10
+          echo "--- flags ---"
+          for w in 'not available' 'in your country' 'Log in' 'premium' 'removed' 'deleted' 'private' 'This video'; do
+            c=$(grep -io "$w" /tmp/p | wc -l); [ "$c" -gt 0 ] && echo "$w x$c"
+          done
+          echo "--- title ---"; grep -oE '<title>[^<]*' /tmp/p | head -1
+          echo "--- size ---"; wc -c /tmp/p
+          echo "=== canonical (no slug) ==="
+          curl -sL --compressed -A "$UA" -o /tmp/p2 -w 'http=%{http_code} size=%{size_download} final=%{url_effective}\n' "https://www.xvideos.com/video.ukiafbf4420/" || true
+          grep -oE "setVideoHLS\('[^']*'" /tmp/p2 | head -1
+          grep -oE "setVideoUrlHigh\('[^']*'" /tmp/p2 | head -1
+          echo "=== embed ==="
+          curl -sL --compressed -A "$UA" -o /tmp/p3 -w 'http=%{http_code} size=%{size_download}\n' "https://www.xvideos.com/embedframe/ukiafbf4420" || true
+          grep -oE "setVideoHLS\('[^']*'|setVideoUrl[^']*'[^']*'" /tmp/p3 | head -5
