@@ -8,6 +8,7 @@ fi
 
 . utils.sh
 
+ROOT=$(pwd)
 cd 666
 
 
@@ -36,16 +37,15 @@ for i in $1; do
     elif [ $(echo "$i" | grep -E "pornhub.com|youtube.com") ]; then
         . ../pornhub.sh "$i"
         continue
-    elif [ $(echo "$i" | grep "www.xvideos.com.*prof-video-click") ]; then
+    elif [ $(echo "$i" | grep -E "www\.xvideos\.com/(prof-video-click|video[./])") ]; then
         . ../xvideos.sh "$i"
         continue
     elif [ $(echo "$i" | grep "www.xvideos.com") ]; then
         . ../xvideos_getUserAllVides.sh "$i"
-        u_list=$(cat tmp/*.txt)
+        u_list=$(cat tmp/*.txt 2>/dev/null)
         rm -rf tmp
-        cd ..
-        . download.sh "$u_list"
-        cd 666
+        # 子 shell 里回仓库根目录再跑，避免把当前 cwd 留在 666 里导致后面 cd 666 失败
+        [ -n "$u_list" ] && ( cd "$ROOT" && . ./download.sh "$u_list" )
         continue
     elif [ ${i: -5} == ".m3u8" ]; then
         install_if_missing ffmpeg
@@ -55,6 +55,7 @@ for i in $1; do
         ffmpeg -i "temp.mp4" -c copy -movflags +faststart "final.mp4"
         mv "final.mp4" "$(md5sum "final.mp4" | awk '{ print $1 }').mp4"
         rm -rf temp.mp4 index.m3u8
+        continue
     fi
     echo "aria2c  UA: $3"
     aria2c -x$2 -U "$3" "$i" 
