@@ -12,7 +12,13 @@ CK=()
 ATTEMPTS=${PAGE_ATTEMPTS:-5}
 BASE_SLEEP=${PAGE_SLEEP_BASE:-5}
 
-page=""; hls=""; high=""; low=""; author=""; title=""; doctitle=""; http_code=""
+page=""; hls=""; high=""; low=""; author=""; title=""; doctitle=""; http_code=""; tried_canon=""
+vid_id() { # $1=url -> 视频 id（用于拼规范地址）
+    printf '%s' "$1" | sed -nE \
+        -e 's#^.*/video[./]([A-Za-z0-9]+)([/?]|$).*#\1#p' \
+        -e 's#^.*/upload/[^/]+/([A-Za-z0-9]+)([/?]|$).*#\1#p' | head -n1
+}
+
 
 parse_vars() { # $1=body
     hls=$(printf '%s' "$1"  | grep -oE "setVideoHLS\('[^']*'"      | head -n1 | cut -d"'" -f2)
@@ -55,6 +61,20 @@ for attempt in $(seq 1 "$ATTEMPTS"); do
         return 0
     fi
     [ -n "$hls" ] && break
+    # 有些页（profile 跳转过来的 slug 地址）只返回无播放器的降级页，用 /video.<id>/_ 再取一次
+    if [ -z "$high" ] && [ -z "$low" ] && [ -z "$tried_canon" ]; then
+        _id=$(vid_id "$i")
+        if [ -n "$_id" ]; then
+            tried_canon=1
+            _canon="https://www.xvideos.com/video.$_id/_"
+            if [ "$_canon" != "$i" ]; then
+                echo "  页面没有播放器信息，改用规范地址重试：$_canon" >&2
+                fetch_page "$_canon" 1
+                parse_vars "$page"
+                [ -n "$hls" ] && break
+            fi
+        fi
+    fi
     if [ "$attempt" -lt "$ATTEMPTS" ]; then
         d=$((attempt * BASE_SLEEP))
         echo "  没拿到 HLS 地址（第 $attempt/$ATTEMPTS 次，页面 ${#page} 字节），${d}s 后重试..." >&2
