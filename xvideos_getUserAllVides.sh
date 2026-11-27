@@ -75,21 +75,20 @@ while [ "$num" -lt 300 ]; do
     fi
 
     if [ -z "$list" ]; then
-        # {"result":false} = 服务器明确说没有更多了；其它空页大概率是限流，多等几轮再判定
-        if printf '%s' "$body" | grep -q '"result"[[:space:]]*:[[:space:]]*false'; then
-            break
-        fi
+        # 空页：{"result":false} 一般表示到底了，但限流也会伪装成这个；已知总数还没抓够就再等等
         tries=0
         while [ "$tries" -lt 3 ] && [ -z "$list" ]; do
+            if printf '%s' "$body" | grep -q '"result"[[:space:]]*:[[:space:]]*false'; then
+                if [ -z "$total" ] || [ "$got" -ge "$total" ]; then
+                    break
+                fi
+            fi
             tries=$((tries + 1))
             w=$((tries * EMPTY_SLEEP))
-            echo "  第 $num 页为空（可能限流），${w}s 后重试（$tries/3）" >&2
+            echo "  第 $num 页为空（已抓 $got/${total:-?}），${w}s 后重试（$tries/3）" >&2
             sleep "$w"
             fetch "https://www.xvideos.com/channels/$author/videos/best/$num"
             list=$(parse_page "$body")
-            if printf '%s' "$body" | grep -q '"result"[[:space:]]*:[[:space:]]*false'; then
-                break
-            fi
         done
         [ -z "$list" ] && break
     fi
