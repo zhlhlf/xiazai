@@ -58,7 +58,7 @@ parse_page() { # $1=body
 }
 
 num=0
-empty_retry=0
+EMPTY_SLEEP=${EMPTY_SLEEP:-5}
 total=""
 got=0
 while [ "$num" -lt 300 ]; do
@@ -75,13 +75,22 @@ while [ "$num" -lt 300 ]; do
     fi
 
     if [ -z "$list" ]; then
-        # 可能是真的到底（末尾页返回 {"result":false,"code":404}），也可能是被限流挡了一下：重试一次再判定
-        if [ "$empty_retry" -eq 0 ]; then
-            empty_retry=1
-            sleep 3
+        # {"result":false} = 服务器明确说没有更多了；其它空页大概率是限流，多等几轮再判定
+        if printf '%s' "$body" | grep -q '"result"[[:space:]]*:[[:space:]]*false'; then
+            break
+        fi
+        tries=0
+        while [ "$tries" -lt 3 ] && [ -z "$list" ]; do
+            tries=$((tries + 1))
+            w=$((tries * EMPTY_SLEEP))
+            echo "  第 $num 页为空（可能限流），${w}s 后重试（$tries/3）" >&2
+            sleep "$w"
             fetch "https://www.xvideos.com/channels/$author/videos/best/$num"
             list=$(parse_page "$body")
-        fi
+            if printf '%s' "$body" | grep -q '"result"[[:space:]]*:[[:space:]]*false'; then
+                break
+            fi
+        done
         [ -z "$list" ] && break
     fi
 
