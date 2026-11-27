@@ -12,7 +12,7 @@ CK=()
 ATTEMPTS=${PAGE_ATTEMPTS:-5}
 BASE_SLEEP=${PAGE_SLEEP_BASE:-5}
 
-page=""; hls=""; high=""; low=""; author=""; title=""; doctitle=""
+page=""; hls=""; high=""; low=""; author=""; title=""; doctitle=""; http_code=""
 
 parse_vars() { # $1=body
     hls=$(printf '%s' "$1"  | grep -oE "setVideoHLS\('[^']*'"      | head -n1 | cut -d"'" -f2)
@@ -24,30 +24,33 @@ parse_vars() { # $1=body
 }
 
 is_gone() { # $1=body
-    printf '%s' "$1" | grep -qiE '<title>[^<]*(not found|404)|video has been (removed|deleted)|no longer available'
+    if [ "$http_code" = "404" ] || [ "$http_code" = "410" ]; then return 0; fi
+    printf '%s' "$1" | grep -qiE '<title>[^<]*(not found|404|找不到|見つかりません|no encontrado|nicht gefunden|non trouv|не найдено|찾을 수 없)'
 }
 
 fetch_page() { # $1=url $2=with_cookie(1/0)
+    local tmp; tmp=$(mktemp)
     if [ "$2" = "1" ] && [ "${#CK[@]}" -gt 0 ]; then
-        curl -sL --compressed -A "$UA" "${CK[@]}" -H "Accept-Language: en-US,en;q=0.9" -e "https://www.xvideos.com/" "$1"
+        http_code=$(curl -sL --compressed -A "$UA" "${CK[@]}" -H "Accept-Language: en-US,en;q=0.9" -e "https://www.xvideos.com/" -o "$tmp" -w '%{http_code}' "$1")
     else
-        curl -sL --compressed -A "$UA" -H "Accept-Language: en-US,en;q=0.9" -e "https://www.xvideos.com/" "$1"
+        http_code=$(curl -sL --compressed -A "$UA" -H "Accept-Language: en-US,en;q=0.9" -e "https://www.xvideos.com/" -o "$tmp" -w '%{http_code}' "$1")
     fi
+    page=$(cat "$tmp" 2>/dev/null); rm -f "$tmp"
 }
 
 for attempt in $(seq 1 "$ATTEMPTS"); do
-    page=$(fetch_page "$i" 1)
+    fetch_page "$i" 1
     parse_vars "$page"
     if is_gone "$page"; then
         # Cookie 里的 session token 失效/被轮换时，xvideos 会回 404；改用匿名再试一次
         if [ "${#CK[@]}" -gt 0 ]; then
             echo "  带 Cookie 返回 404（token 可能已失效），改用匿名重试..." >&2
-            page=$(fetch_page "$i" 0)
+            fetch_page "$i" 0
             parse_vars "$page"
         fi
     fi
     if is_gone "$page"; then
-        echo "  视频不存在或已下架（$doctitle），跳过：$i" >&2
+        echo "  视频不存在或已下架（HTTP $http_code, $doctitle），跳过：$i" >&2
         echo "$i" >> gone.txt
         return 0
     fi
@@ -105,7 +108,7 @@ if [ -z "$src" ] && [ -n "$mp4" ]; then
     fi
 fi
 if [ -z "$src" ]; then
-    echo "  没解析到可下载地址（页面 ${#page} 字节，title=$doctitle），记入失败重试：$i" >&2
+    echo "  没解析到可下载地址（HTTP $http_code，页面 ${#page} 字节，title=$doctitle），记入失败重试：$i" >&2
     echo "$i" >> failed.txt
     return 0
 fi

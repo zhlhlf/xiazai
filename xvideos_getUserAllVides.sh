@@ -24,12 +24,23 @@ out="tmp/$author.txt"
 CK=()
 [ -n "${XVCOOKIE:-}" ] && CK=(-H "Cookie: $XVCOOKIE")
 
-fetch() { # $1=url
-    curl -sL --compressed \
-        -A "$UA" "${CK[@]}" \
-        -H "Accept: application/json,text/plain,*/*" \
-        -H "Referer: https://www.xvideos.com/$author" \
-        "$1"
+http_code=""
+fetch() { # $1=url $2=nocookie
+    local tmp; tmp=$(mktemp)
+    if [ "$2" = "nocookie" ] || [ "${#CK[@]}" -eq 0 ]; then
+        http_code=$(curl -sL --compressed \
+            -A "$UA" \
+            -H "Accept: application/json,text/plain,*/*" \
+            -H "Referer: https://www.xvideos.com/$author" \
+            -o "$tmp" -w '%{http_code}' "$1")
+    else
+        http_code=$(curl -sL --compressed \
+            -A "$UA" "${CK[@]}" \
+            -H "Accept: application/json,text/plain,*/*" \
+            -H "Referer: https://www.xvideos.com/$author" \
+            -o "$tmp" -w '%{http_code}' "$1")
+    fi
+    body=$(cat "$tmp" 2>/dev/null); rm -f "$tmp"
 }
 
 # 把一页响应解析成视频路径（每行一个）。优先按官方 JSON 的 .videos[].u，
@@ -52,7 +63,10 @@ total=""
 got=0
 while [ "$num" -lt 300 ]; do
     echo "Page: $num"
-    body=$(fetch "https://www.xvideos.com/channels/$author/videos/best/$num")
+    fetch "https://www.xvideos.com/channels/$author/videos/best/$num"
+    if [ "$http_code" = "404" ] && [ "${#CK[@]}" -gt 0 ]; then
+        fetch "https://www.xvideos.com/channels/$author/videos/best/$num" nocookie
+    fi
     list=$(parse_page "$body")
 
     if [ "$num" -eq 0 ] && [ -z "$total" ]; then
@@ -65,7 +79,7 @@ while [ "$num" -lt 300 ]; do
         if [ "$empty_retry" -eq 0 ]; then
             empty_retry=1
             sleep 3
-            body=$(fetch "https://www.xvideos.com/channels/$author/videos/best/$num")
+            fetch "https://www.xvideos.com/channels/$author/videos/best/$num"
             list=$(parse_page "$body")
         fi
         [ -z "$list" ] && break
