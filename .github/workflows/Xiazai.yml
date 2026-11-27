@@ -44,6 +44,8 @@ jobs:
         uses: actions/checkout@master
   
       - name: 下载
+        env:
+          XVCOOKIE: ${{ secrets.XVCOOKIE }}
         run: |
           rm -rf 666
           mkdir 666

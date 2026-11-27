@@ -21,9 +21,12 @@ UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Ge
 out="tmp/$author.txt"
 : > "$out"
 
+CK=()
+[ -n "${XVCOOKIE:-}" ] && CK=(-H "Cookie: $XVCOOKIE")
+
 fetch() { # $1=url
     curl -sL --compressed \
-        -A "$UA" \
+        -A "$UA" "${CK[@]}" \
         -H "Accept: application/json,text/plain,*/*" \
         -H "Referer: https://www.xvideos.com/$author" \
         "$1"

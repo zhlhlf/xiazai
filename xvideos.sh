@@ -7,6 +7,8 @@ if command -v install_if_missing >/dev/null 2>&1; then install_if_missing ffmpeg
 
 i="$1"
 UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+CK=()
+[ -n "${XVCOOKIE:-}" ] && CK=(-H "Cookie: $XVCOOKIE")
 ATTEMPTS=${PAGE_ATTEMPTS:-5}
 BASE_SLEEP=${PAGE_SLEEP_BASE:-5}
 
@@ -14,7 +16,7 @@ page=""; hls=""; high=""; low=""; author=""; title=""
 
 # 取视频页并解析播放器变量。xvideos 限流时会降级成「只有 mp4_sd」的页面，多试几次。
 for attempt in $(seq 1 "$ATTEMPTS"); do
-    page=$(curl -sL --compressed -A "$UA" \
+    page=$(curl -sL --compressed -A "$UA" "${CK[@]}" \
         -H "Accept-Language: en-US,en;q=0.9" \
         -e "https://www.xvideos.com/" "$i")
     hls=$(printf '%s' "$page"  | grep -oE "setVideoHLS\('[^']*'"      | head -n1 | cut -d"'" -f2)
@@ -46,7 +48,7 @@ src=""; tier=""
 if [ -n "$hls" ]; then
     master=""
     for m in 1 2 3; do
-        master=$(curl -sL --compressed -A "$UA" "$hls")
+        master=$(curl -sL --compressed -A "$UA" "${CK[@]}" "$hls")
         if printf '%s' "$master" | grep -qE 'hls-[0-9]+p|#EXTINF'; then break; fi
         [ "$m" -lt 3 ] && sleep 3
     done
