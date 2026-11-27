@@ -1,7 +1,7 @@
 #!/bin/bash
 # 下载单个 xvideos 视频，自动选最高画质；带限流重试、低清延迟重试、失败重试。
 # 用法：. xvideos.sh <video-url>
-# 环境变量：XIAZAI_ALLOW_LOW=1 允许直接落低清；PAGE_ATTEMPTS / PAGE_SLEEP_BASE 控制重试。
+# 环境变量：XVCOOKIE=登录 Cookie（可选）；XIAZAI_ALLOW_LOW=1 允许直接落低清。
 
 if command -v install_if_missing >/dev/null 2>&1; then install_if_missing ffmpeg; fi
 
@@ -12,27 +12,46 @@ CK=()
 ATTEMPTS=${PAGE_ATTEMPTS:-5}
 BASE_SLEEP=${PAGE_SLEEP_BASE:-5}
 
-page=""; hls=""; high=""; low=""; author=""; title=""
+page=""; hls=""; high=""; low=""; author=""; title=""; doctitle=""
 
-# 取视频页并解析播放器变量。xvideos 限流时会降级成「只有 mp4_sd」的页面，多试几次。
+parse_vars() { # $1=body
+    hls=$(printf '%s' "$1"  | grep -oE "setVideoHLS\('[^']*'"      | head -n1 | cut -d"'" -f2)
+    high=$(printf '%s' "$1" | grep -oE "setVideoUrlHigh\('[^']*'" | head -n1 | cut -d"'" -f2)
+    low=$(printf '%s' "$1"  | grep -oE "setVideoUrlLow\('[^']*'"  | head -n1 | cut -d"'" -f2)
+    author=$(printf '%s' "$1" | grep -oE "setUploaderName\('[^']*'" | head -n1 | cut -d"'" -f2)
+    title=$(printf '%s' "$1"  | grep -oE "setVideoTitle\('[^']*'"  | head -n1 | cut -d"'" -f2)
+    doctitle=$(printf '%s' "$1" | grep -oE '<title>[^<]*' | head -n1 | sed 's/<title>//')
+}
+
+is_gone() { # $1=body
+    printf '%s' "$1" | grep -qiE '<title>[^<]*(not found|404)|video has been (removed|deleted)|no longer available'
+}
+
+fetch_page() { # $1=url $2=with_cookie(1/0)
+    if [ "$2" = "1" ] && [ "${#CK[@]}" -gt 0 ]; then
+        curl -sL --compressed -A "$UA" "${CK[@]}" -H "Accept-Language: en-US,en;q=0.9" -e "https://www.xvideos.com/" "$1"
+    else
+        curl -sL --compressed -A "$UA" -H "Accept-Language: en-US,en;q=0.9" -e "https://www.xvideos.com/" "$1"
+    fi
+}
+
 for attempt in $(seq 1 "$ATTEMPTS"); do
-    page=$(curl -sL --compressed -A "$UA" "${CK[@]}" \
-        -H "Accept-Language: en-US,en;q=0.9" \
-        -e "https://www.xvideos.com/" "$i")
-    hls=$(printf '%s' "$page"  | grep -oE "setVideoHLS\('[^']*'"      | head -n1 | cut -d"'" -f2)
-    high=$(printf '%s' "$page" | grep -oE "setVideoUrlHigh\('[^']*'" | head -n1 | cut -d"'" -f2)
-    low=$(printf '%s' "$page"  | grep -oE "setVideoUrlLow\('[^']*'"  | head -n1 | cut -d"'" -f2)
-    author=$(printf '%s' "$page" | grep -oE "setUploaderName\('[^']*'" | head -n1 | cut -d"'" -f2)
-    title=$(printf '%s' "$page"  | grep -oE "setVideoTitle\('[^']*'"  | head -n1 | cut -d"'" -f2)
-    # 404 / 已下架：重试也没用，直接跳过
-    if printf '%s' "$page" | grep -qiE '<title>[^<]*(not found|404)|video has been (removed|deleted)|no longer available'; then
-        echo "  视频不存在或已下架（页面标题 Not found），跳过：$i" >&2
+    page=$(fetch_page "$i" 1)
+    parse_vars "$page"
+    if is_gone "$page"; then
+        # Cookie 里的 session token 失效/被轮换时，xvideos 会回 404；改用匿名再试一次
+        if [ "${#CK[@]}" -gt 0 ]; then
+            echo "  带 Cookie 返回 404（token 可能已失效），改用匿名重试..." >&2
+            page=$(fetch_page "$i" 0)
+            parse_vars "$page"
+        fi
+    fi
+    if is_gone "$page"; then
+        echo "  视频不存在或已下架（$doctitle），跳过：$i" >&2
         echo "$i" >> gone.txt
         return 0
     fi
-    if [ -n "$hls" ]; then
-        break
-    fi
+    [ -n "$hls" ] && break
     if [ "$attempt" -lt "$ATTEMPTS" ]; then
         d=$((attempt * BASE_SLEEP))
         echo "  没拿到 HLS 地址（第 $attempt/$ATTEMPTS 次，页面 ${#page} 字节），${d}s 后重试..." >&2
@@ -48,7 +67,11 @@ src=""; tier=""
 if [ -n "$hls" ]; then
     master=""
     for m in 1 2 3; do
-        master=$(curl -sL --compressed -A "$UA" "${CK[@]}" "$hls")
+        if [ "${#CK[@]}" -gt 0 ]; then
+            master=$(curl -sL --compressed -A "$UA" "${CK[@]}" "$hls")
+        else
+            master=$(curl -sL --compressed -A "$UA" "$hls")
+        fi
         if printf '%s' "$master" | grep -qE 'hls-[0-9]+p|#EXTINF'; then break; fi
         [ "$m" -lt 3 ] && sleep 3
     done
@@ -69,7 +92,7 @@ if [ -n "$hls" ]; then
 fi
 
 # HLS 拿不到时只剩 mp4_sd（UrlHigh 与 UrlLow 实际是同一个低清文件）。
-# 这种情况下不立刻落低清：先记下来，整轮跑完延迟后再重试一次，避免被限流时批量降级。
+# 这种情况不立刻落低清：先记下来，整轮跑完延迟后再重试一次，避免被限流时批量降级。
 mp4="${high:-$low}"
 if [ -z "$src" ] && [ -n "$mp4" ]; then
     if [ "${XIAZAI_ALLOW_LOW:-0}" = "1" ]; then
@@ -81,9 +104,8 @@ if [ -z "$src" ] && [ -n "$mp4" ]; then
         return 0
     fi
 fi
-# 彻底没地址（下架/风控页），记失败待重试
 if [ -z "$src" ]; then
-    echo "  没解析到可下载地址（页面 ${#page} 字节），记入失败重试：$i" >&2
+    echo "  没解析到可下载地址（页面 ${#page} 字节，title=$doctitle），记入失败重试：$i" >&2
     echo "$i" >> failed.txt
     return 0
 fi
