@@ -1,0 +1,22 @@
+name: Probe
+on:
+  workflow_dispatch:
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - name: probe
+        run: |
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+          U="https://www.xvideos.com/prof-video-click/upload/susuxi99/omlffop059c/_s_jj_m_"
+          for t in 1 2; do
+            curl -sL --compressed -A "$UA" -H 'Accept-Language: en-US,en;q=0.9' -e "https://www.xvideos.com/" -o /tmp/p -w "try$t http=%{http_code} size=%{size_download} final=%{url_effective}\n" "$U"
+            echo "  setVideoHLS=$(grep -c 'setVideoHLS' /tmp/p) High=$(grep -c 'setVideoUrlHigh' /tmp/p) Low=$(grep -c 'setVideoUrlLow' /tmp/p) m3u8=$(grep -c 'm3u8' /tmp/p) mp4=$(grep -c '\.mp4' /tmp/p)"
+            echo "  title: $(grep -oE '<title>[^<]*' /tmp/p | head -1)"
+            grep -oE 'html5player\.[A-Za-z]+' /tmp/p | sort | uniq -c | head -10
+            grep -oiE '(login|sign in|register|premium|not available|restricted|age)[^<]{0,60}' /tmp/p | sort -u | head -8
+            sleep 2
+          done
+          echo "== 对照：已知成功的视频 =="
+          curl -sL --compressed -A "$UA" -e "https://www.xvideos.com/" -o /tmp/q -w "http=%{http_code} size=%{size_download}\n" "https://www.xvideos.com/video.okdeivhd9ba/_"
+          echo "  setVideoHLS=$(grep -c 'setVideoHLS' /tmp/q) High=$(grep -c 'setVideoUrlHigh' /tmp/q)"
