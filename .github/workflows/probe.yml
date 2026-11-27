@@ -1,0 +1,47 @@
+name: Probe
+
+on:
+  workflow_dispatch:
+    inputs:
+      U:
+        description: 'video url'
+        required: true
+        default: 'https://www.xvideos.com/video.kfokofb3aca/_souai_'
+
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - name: probe
+        run: |
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+          U="${{ github.event.inputs.U }}"
+          echo "URL=$U"
+          curl -sL --compressed -A "$UA" -H 'Accept-Language: en-US,en;q=0.9' -e "https://www.xvideos.com/" -c /tmp/cj -b /tmp/cj -o /tmp/p -D /tmp/h -w 'http=%{http_code} size=%{size_download} ct=%{content_type} final=%{url_effective}\n' "$U" || true
+          echo "--- headers ---"; grep -iE 'HTTP/|^location|content-type|set-cookie' /tmp/h | head -20
+          echo "--- player vars ---"
+          for k in setVideoHLS setVideoHls setVideoUrlHigh setVideoUrlLow setVideoUrl setVideoTitle setUploaderName; do
+            printf '%s: ' "$k"; grep -oE "${k}\('[^']*'" /tmp/p | head -1; echo
+          done
+          echo "--- grep hls/mp4/setVideo ---"
+          grep -inE 'm3u8|mp4|setvideo|html5player|videoUrl' /tmp/p | head -40
+          echo "--- contentUrl/json-ld ---"
+          grep -oE '"contentUrl"[^,}]*|"thumbnailUrl"[^,}]*' /tmp/p | head -5
+          echo "--- meta ---"
+          grep -oE '<meta[^>]*(og:video|twitter:player:stream)[^>]*>' /tmp/p | head -10
+          echo "--- flags ---"
+          for w in 'not found' 'not available' 'in your country' 'log in' 'premium' 'removed' 'deleted' 'private' 'age verification'; do
+            c=$(grep -io "$w" /tmp/p | wc -l); [ "$c" -gt 0 ] && echo "$w x$c"
+          done
+          echo "--- title ---"; grep -oE '<title>[^<]*' /tmp/p | head -1
+          echo "--- size ---"; wc -c /tmp/p
+          echo "=== canonical ==="
+          curl -sL --compressed -A "$UA" -o /tmp/p2 -w 'http=%{http_code} size=%{size_download} final=%{url_effective}\n' "https://www.xvideos.com/video.kfokofb3aca/" || true
+          grep -oE "setVideoHLS\('[^']*'|setVideoUrlHigh\('[^']*'|setVideoUrlLow\('[^']*'" /tmp/p2 | head -5
+          grep -oE '<title>[^<]*' /tmp/p2 | head -1
+          echo "=== embed ==="
+          curl -sL --compressed -A "$UA" -o /tmp/p3 -w 'http=%{http_code} size=%{size_download}\n' "https://www.xvideos.com/embedframe/kfokofb3aca" || true
+          grep -oE "setVideoHLS\('[^']*'|setVideoUrl[^']*'[^']*'|https?://[^\"' ]*(m3u8|mp4)[^\"' ]*" /tmp/p3 | head -10
+          echo "=== mobile ==="
+          curl -sL --compressed -A "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 Mobile/15E148" -o /tmp/p4 -w 'http=%{http_code} size=%{size_download} final=%{url_effective}\n' "https://www.xvideos.com/video.kfokofb3aca/_souai_" || true
+          grep -oE "setVideoHLS\('[^']*'|https?://[^\"' ]*(m3u8|mp4)[^\"' ]*" /tmp/p4 | head -10
