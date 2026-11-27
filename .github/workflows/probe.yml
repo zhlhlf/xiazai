@@ -1,0 +1,22 @@
+name: Probe
+on:
+  workflow_dispatch:
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - name: probe
+        run: |
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+          A=souai_couple
+          for n in 0 1 2 3 4 5 6 7; do
+            for s in best new; do
+              c=$(curl -sL --compressed -A "$UA" -H 'Accept: application/json,text/plain,*/*' -H "Referer: https://www.xvideos.com/$A" -o /tmp/b -w '%{http_code}' "https://www.xvideos.com/channels/$A/videos/$s/$n")
+              echo "== $s/$n http=$c size=$(stat -c%s /tmp/b) json_videos=$(jq -r '(.videos // []) | length' /tmp/b 2>/dev/null || echo -) nb=$(jq -r '.nb_videos // "-"' /tmp/b 2>/dev/null || echo -)"
+              [ "$s" = best ] && head -c 120 /tmp/b | tr -d '\n' && echo
+            done
+          done
+          echo "== profile page =="
+          curl -sL --compressed -A "$UA" -o /tmp/p -w 'http=%{http_code} size=%{size_download}\n' "https://www.xvideos.com/$A"
+          grep -oE '"nb_videos":[0-9]+|nb_videos[^0-9]{0,5}[0-9]+' /tmp/p | head -3
+          grep -oE '[0-9]+ videos' /tmp/p | head -5
