@@ -96,13 +96,14 @@ while [ "$num" -lt 300 ]; do
         cnt=$((cnt + 1))
     done <<< "$list" >> "$out"
 
-    got=$((got + cnt))
+    sort -u "$out" -o "$out" 2>/dev/null
+    got=$(grep -c . "$out")
     num=$((num + 1))
-    # 已知总数就按总数停；否则不足一整页（10 条）就当最后一页
+    # 已知总数就按总数停；不知道总数时才用「不足一整页」当启发式
     if [ -n "$total" ] && [ "$got" -ge "$total" ]; then
         break
     fi
-    if [ "$cnt" -lt 10 ]; then
+    if [ -z "$total" ] && [ "$cnt" -lt 10 ]; then
         break
     fi
 done
